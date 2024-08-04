@@ -25,6 +25,10 @@ export interface MinecraftContextProps {
   playerAttackLab: {
     playerBaseAttack: number,
     setPlayerBaseAttack: (attack: number) => void,
+    playerWeaknessLevel: number,
+    setPlayerWeaknessLevel: (level: number) => void,
+    playerStrengthLevel: number,
+    setPlayerStrengthLevel: (level: number) => void,
     playerWeapons: EnchantedWeapon[],
     setPlayerWeapons: (weapons: EnchantedWeapon[]) => void,
     dummyMob: EnchantedArmorSet,
@@ -55,6 +59,10 @@ const context = createContext<MinecraftContextProps>({
   playerAttackLab: {
     playerBaseAttack: 1,
     setPlayerBaseAttack: () => {},
+    playerWeaknessLevel: 0,
+    setPlayerWeaknessLevel: () => {},
+    playerStrengthLevel: 0,
+    setPlayerStrengthLevel: () => {},
     playerWeapons: [],
     setPlayerWeapons: () => {},
     dummyMob: [
@@ -102,6 +110,8 @@ const context = createContext<MinecraftContextProps>({
 function MinecraftProvider({children}: PropsWithChildren) {
   // Player Attack Lab
   const [playerBaseAttack, setPlayerBaseAttack] = useState(1.0);
+  const [playerWeaknessLevel, setPlayerWeaknessLevel] = useState(0);
+  const [playerStrengthLevel, setPlayerStrengthLevel] = useState(0);
   const [playerWeapons, setPlayerWeapons] = useState<EnchantedWeapon[]>([
     {
       item: DefaultWeapons.fist,
@@ -200,7 +210,7 @@ function MinecraftProvider({children}: PropsWithChildren) {
     const newDamageTakenCrit = [] as number[];
     playerWeapons.forEach(weapon => {
       const weaponItem = weapon.item;
-      let attack = playerBaseAttack;
+      let attack = playerBaseAttack + 3*playerStrengthLevel - 4*playerWeaknessLevel;
       if(!isCustomWeapon(weaponItem)) {
         attack += getWeaponAttackDamage(weaponItem);
       }
@@ -234,7 +244,7 @@ function MinecraftProvider({children}: PropsWithChildren) {
     setDamageDealtCrit(newDamageDealtCrit);
     setDamageTaken(newDamageTaken),
     setDamageTakenCrit(newDamageTakenCrit);
-  }, [playerBaseAttack, playerWeapons, dummyArmor, dummyArmorToughness, dummyMagicProtection]);
+  }, [playerBaseAttack, playerStrengthLevel, playerWeaknessLevel, playerWeapons, dummyArmor, dummyArmorToughness, dummyMagicProtection]);
 
   // TODO: Mob Attack Lab
 
@@ -243,6 +253,10 @@ function MinecraftProvider({children}: PropsWithChildren) {
       playerAttackLab: {
         playerBaseAttack,
         setPlayerBaseAttack,
+        playerWeaknessLevel,
+        setPlayerWeaknessLevel,
+        playerStrengthLevel,
+        setPlayerStrengthLevel,
         playerWeapons,
         setPlayerWeapons,
         dummyMob,

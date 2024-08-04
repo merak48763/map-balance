@@ -2,7 +2,9 @@ import { createTheme, MantineProvider } from "@mantine/core";
 
 import Shell from "./parts/Shell";
 
-const theme = createTheme({});
+const theme = createTheme({
+  fontFamilyMonospace: "inconsolata, monospace"
+});
 
 function App() {
   return (

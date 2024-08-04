@@ -24,7 +24,7 @@ const pages = [
     page: MobAttackPage
   },
   {
-    label: "說明",
+    label: "關於",
     value: Pages.about,
     icon: IconInfo,
     page: AboutPage

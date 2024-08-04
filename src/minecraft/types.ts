@@ -112,7 +112,8 @@ type Enchantment = WeaponEnchantment | ArmorEnchantment;
 
 interface EnchantedItem<I extends Item, E extends Enchantment> {
   item: I,
-  enchantments: E[]
+  enchantments: E[],
+  customName?: string
 }
 export type EnchantedWeapon = EnchantedItem<Weapon, WeaponEnchantment>;
 export type EnchantedHeadArmor = EnchantedItem<HeadArmor, ArmorEnchantment>;
