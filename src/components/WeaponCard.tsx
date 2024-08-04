@@ -1,62 +1,24 @@
+import type { WeaponItem } from "../minecraft/data";
+
 import { Table, Text } from "@mantine/core";
 import ItemCard from "./ItemCard";
 import Number from "./Number";
 
-import { EnchantedWeapon, WeaponEnchantment, CustomWeaponEnchantmentEffectTarget } from "../minecraft/types";
-import { isCustomWeapon, isCustomWeaponEnchantment } from "../minecraft/types";
-import { getWeaponName, getWeaponEnchantmentName, getEnchantmentLevelName } from "../minecraft/preset";
-
 export interface WeaponCardProps {
-  weapon?: EnchantedWeapon,
-  damageDealt?: number,
-  damageDealtCrit?: number,
-  damageTaken?: number,
-  damageTakenCrit?: number,
-  onDelete?: () => void,
-  onRequireUpdate?: () => void
-}
-
-function getItemName(weapon?: EnchantedWeapon) {
-  if(weapon === undefined) return "N/A";
-  if(weapon.customName) return weapon.customName;
-  if(isCustomWeapon(weapon.item)) return "自訂武器";
-  return getWeaponName(weapon.item);
-}
-function getEnchantmentName(enchantment: WeaponEnchantment) {
-  if(isCustomWeaponEnchantment(enchantment)) {
-    if(enchantment.effect === CustomWeaponEnchantmentEffectTarget.damage) {
-      return (
-        <>
-          [自訂]傷害值
-          <Number value={enchantment.value} delta />
-        </>
-      );
-    }
-    else if(enchantment.effect === CustomWeaponEnchantmentEffectTarget.armorEffectiveness) {
-      return (
-        <>
-          [自訂]盔甲效益
-          <Number value={enchantment.value} percentage delta />
-        </>
-      );
-    }
-  }
-  else {
-    return (
-      <>
-        {getWeaponEnchantmentName(enchantment.type)}
-        {" "}
-        {getEnchantmentLevelName(enchantment.level)}
-      </>
-    );
-  }
+  weapon: WeaponItem,
+  index?: number,
+  damageDealt1?: number,
+  damageDealt2?: number,
+  damageTaken1?: number,
+  damageTaken2?: number,
+  onDelete?: () => void
 }
 
 function WeaponCard(props: WeaponCardProps) {
-  const weaponName = getItemName(props.weapon);
+  const weaponName = props.weapon?.customName || `測試品 #${props.index}`;
 
   return (
-    <ItemCard title={weaponName} onDelete={props.onDelete} onRequireUpdate={props.onRequireUpdate}>
+    <ItemCard title={<Text fw={500}>{weaponName}</Text>} onDelete={props.onDelete}>
       <Table>
         <Table.Thead>
           <Table.Tr>
@@ -67,28 +29,25 @@ function WeaponCard(props: WeaponCardProps) {
         </Table.Thead>
         <Table.Tbody>
           <Table.Tr>
-            <Table.Td>一般攻擊</Table.Td>
+            <Table.Td>{props.weapon.type === "melee" ? "一般攻擊" : "最低攻擊"}</Table.Td>
             <Table.Td>
-              <Number value={props.damageDealt} />
+              <Number value={props.damageDealt1} />
             </Table.Td>
             <Table.Td>
-              <Number value={props.damageTaken} />
+              <Number value={props.damageTaken1} />
             </Table.Td>
           </Table.Tr>
           <Table.Tr>
-            <Table.Td>暴擊</Table.Td>
+            <Table.Td>{props.weapon.type === "melee" ? "暴擊" : "最高攻擊"}</Table.Td>
             <Table.Td>
-              <Number value={props.damageDealtCrit} />
+              <Number value={props.damageDealt2} />
             </Table.Td>
             <Table.Td>
-              <Number value={props.damageTakenCrit} />
+              <Number value={props.damageTaken2} />
             </Table.Td>
           </Table.Tr>
         </Table.Tbody>
       </Table>
-      {props.weapon?.enchantments.map((enchantment, idx) => (
-        <Text key={idx} c="violet">{getEnchantmentName(enchantment)}</Text>
-      ))}
     </ItemCard>
   );
 }

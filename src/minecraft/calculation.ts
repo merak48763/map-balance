@@ -1,6 +1,9 @@
 function calculateDamageDealt(attack: number, enchantmentBonus: number): [number, number] {
   const clampedAttack = Math.max(0, attack);
-  return [clampedAttack + enchantmentBonus, clampedAttack*1.5 + enchantmentBonus];
+  return [
+    Math.max(0, clampedAttack + enchantmentBonus),
+    Math.max(0, clampedAttack*1.5 + enchantmentBonus)
+  ];
 }
 
 function calculateDamageTaken(armor: number, armorToughness: number, epf: number, incomingDamage: number, incomingBreachEffect: number) {

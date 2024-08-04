@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { AppShell, Burger, Group, NavLink, Text, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconSword, IconShield, IconInfoSquareRounded as IconInfo, IconBrandMinecraft } from "@tabler/icons-react";
+import { IconSword, IconShield, IconInfoSquareRounded as IconInfo, IconIkosaedr } from "@tabler/icons-react";
 import { Pages } from "../types";
 
-import { MinecraftProvider } from "../minecraft/hook";
+import { PlayerAttackLabProvider } from "../minecraft/playerAttackLab";
 
 import PlayerAttackPage from "./PlayerAttack";
 import MobAttackPage from "./MobAttack";
@@ -50,7 +50,7 @@ function Shell() {
       <AppShell.Header>
         <Group h="100%" px="md">
           <Burger opened={navOpened} onClick={toggleNav} hiddenFrom="sm" size="sm" />
-          <IconBrandMinecraft style={{width: rem(32), height: rem(32)}} />
+          <IconIkosaedr style={{width: rem(32), height: rem(32)}} />
           <Text fw={600} fz={rem(24)}>Minecraft 地圖平衡工具箱</Text>
         </Group>
       </AppShell.Header>
@@ -60,11 +60,11 @@ function Shell() {
         )}
       </AppShell.Navbar>
       <AppShell.Main>
-        <MinecraftProvider>
+        <PlayerAttackLabProvider>
           {pages.map(p =>
             activePage === p.value && <p.page key={p.value} />
           )}
-        </MinecraftProvider>
+        </PlayerAttackLabProvider>
       </AppShell.Main>
     </AppShell>
   );
